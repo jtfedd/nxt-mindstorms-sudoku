@@ -11,9 +11,14 @@ string BoolToStr(bool value) {
   return result;
 }
 
+struct readable_description {
+  string expected;
+  string actual;
+};
+
 struct test_case {
   string name;
-  string description;
+  readable_description description;
   bool passing;
 };
 
@@ -23,7 +28,8 @@ void assign_result(test_case &tc, string e, string a, bool result) {
   }
 
   tc.passing = result;
-  tc.description = "E:" + e + " A:" + a;
+  tc.description.expected = e;
+  tc.description.actual = a;
 }
 
 void assertTrue(test_case &tc, bool result) {
@@ -44,8 +50,6 @@ void show_current_test(int current, int total) {
   NumOut(0, LCD_LINE2, current + 1);
   TextOut(15, LCD_LINE2, "of");
   NumOut(30, LCD_LINE2, total);
-  
-  Wait(200);
 }
 
 void draw_summary(test_case &tests[], int test_count) {
@@ -73,7 +77,10 @@ void draw_failed_test(test_case tc) {
   ClearScreen();
   TextOut(0, LCD_LINE1, tc.name);
   TextOut(0, LCD_LINE2, "Failed");
-  TextOut(0, LCD_LINE3, tc.description);
+  TextOut(0, LCD_LINE3, "Expected:");
+  TextOut(10, LCD_LINE4, tc.description.expected);
+  TextOut(0, LCD_LINE5, "Actual:");
+  TextOut(10, LCD_LINE6, tc.description.actual);
 }
 
 void show_results(test_case &tests[], int test_count) {
