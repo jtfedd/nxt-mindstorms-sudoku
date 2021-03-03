@@ -3,8 +3,10 @@
 
 // Include the test files
 #include "test/test_test.h"
+#include "test/test_test2.h"
+#include "test/test_test3.h"
 
-#define NUM_TESTS 6
+#define NUM_TESTS 18
 
 task main() {
   test_case tests[NUM_TESTS];
@@ -12,7 +14,7 @@ task main() {
   for (int i = 0; i < NUM_TESTS; i++) {
     tests[i].passing = true;
   }
-  
+
   show_current_test(0, NUM_TESTS);
   current_test = tests[0];
   current_test.name = "Test1";
@@ -24,30 +26,102 @@ task main() {
   current_test.name = "Test2";
   Test_Test2(current_test);
   tests[1] = current_test;
-  
+
   show_current_test(2, NUM_TESTS);
   current_test = tests[2];
   current_test.name = "Test3";
   Test_Test3(current_test);
   tests[2] = current_test;
-  
+
   show_current_test(3, NUM_TESTS);
   current_test = tests[3];
   current_test.name = "Test4";
   Test_Test4(current_test);
   tests[3] = current_test;
-  
+
   show_current_test(4, NUM_TESTS);
   current_test = tests[4];
   current_test.name = "Test5";
   Test_Test5(current_test);
   tests[4] = current_test;
-  
+
   show_current_test(5, NUM_TESTS);
   current_test = tests[5];
   current_test.name = "Test6";
   Test_Test6(current_test);
   tests[5] = current_test;
-  
+
+  show_current_test(6, NUM_TESTS);
+  current_test = tests[6];
+  current_test.name = "Test1";
+  Test_Test1(current_test);
+  tests[6] = current_test;
+
+  show_current_test(7, NUM_TESTS);
+  current_test = tests[7];
+  current_test.name = "Test2";
+  Test_Test2(current_test);
+  tests[7] = current_test;
+
+  show_current_test(8, NUM_TESTS);
+  current_test = tests[8];
+  current_test.name = "Test3";
+  Test_Test3(current_test);
+  tests[8] = current_test;
+
+  show_current_test(9, NUM_TESTS);
+  current_test = tests[9];
+  current_test.name = "Test4";
+  Test_Test4(current_test);
+  tests[9] = current_test;
+
+  show_current_test(10, NUM_TESTS);
+  current_test = tests[10];
+  current_test.name = "Test5";
+  Test_Test5(current_test);
+  tests[10] = current_test;
+
+  show_current_test(11, NUM_TESTS);
+  current_test = tests[11];
+  current_test.name = "Test6";
+  Test_Test6(current_test);
+  tests[11] = current_test;
+
+  show_current_test(12, NUM_TESTS);
+  current_test = tests[12];
+  current_test.name = "Test1";
+  Test_Test1(current_test);
+  tests[12] = current_test;
+
+  show_current_test(13, NUM_TESTS);
+  current_test = tests[13];
+  current_test.name = "Test2";
+  Test_Test2(current_test);
+  tests[13] = current_test;
+
+  show_current_test(14, NUM_TESTS);
+  current_test = tests[14];
+  current_test.name = "Test3";
+  Test_Test3(current_test);
+  tests[14] = current_test;
+
+  show_current_test(15, NUM_TESTS);
+  current_test = tests[15];
+  current_test.name = "Test4";
+  Test_Test4(current_test);
+  tests[15] = current_test;
+
+  show_current_test(16, NUM_TESTS);
+  current_test = tests[16];
+  current_test.name = "Test5";
+  Test_Test5(current_test);
+  tests[16] = current_test;
+
+  show_current_test(17, NUM_TESTS);
+  current_test = tests[17];
+  current_test.name = "Test6";
+  Test_Test6(current_test);
+  tests[17] = current_test;
+
   show_results(tests, NUM_TESTS);
 }
