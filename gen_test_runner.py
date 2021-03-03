@@ -28,7 +28,7 @@ for filename in sys.argv[1:]:
     lines = f.readlines()
 
     for l in lines:
-        if l.startswith("test_case Test_"):
+        if l.startswith("void Test_"):
             test_function_name = l.split(" ")[1].split("(")[0]
             test_name = test_function_name[5:]
             print(test_name)
