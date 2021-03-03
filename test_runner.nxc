@@ -1,0 +1,53 @@
+// Include the test library
+#include "test/testing.h"
+
+// Include the test files
+#include "test/test_test.h"
+
+#define NUM_TESTS 6
+
+task main() {
+  test_case tests[NUM_TESTS];
+  test_case current_test;
+  for (int i = 0; i < NUM_TESTS; i++) {
+    tests[i].passing = true;
+  }
+
+  show_current_test(0, NUM_TESTS);
+  current_test = tests[0];
+  current_test.name = "Test1";
+  Test_Test1(current_test);
+  tests[0] = current_test;
+
+  show_current_test(1, NUM_TESTS);
+  current_test = tests[1];
+  current_test.name = "Test2";
+  Test_Test2(current_test);
+  tests[1] = current_test;
+
+  show_current_test(2, NUM_TESTS);
+  current_test = tests[2];
+  current_test.name = "Test3";
+  Test_Test3(current_test);
+  tests[2] = current_test;
+
+  show_current_test(3, NUM_TESTS);
+  current_test = tests[3];
+  current_test.name = "Test4";
+  Test_Test4(current_test);
+  tests[3] = current_test;
+
+  show_current_test(4, NUM_TESTS);
+  current_test = tests[4];
+  current_test.name = "Test5";
+  Test_Test5(current_test);
+  tests[4] = current_test;
+
+  show_current_test(5, NUM_TESTS);
+  current_test = tests[5];
+  current_test.name = "Test6";
+  Test_Test6(current_test);
+  tests[5] = current_test;
+
+  show_results(tests, NUM_TESTS);
+}
