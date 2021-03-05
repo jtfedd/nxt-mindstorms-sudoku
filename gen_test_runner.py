@@ -1,29 +1,15 @@
-import sys, os
-
-def printHelp():
-  print("Usage:")
-  print("\tpython gen_test_runner.py [test_files...]")
-
-if len(sys.argv) == 1:
-    print("No files specified")
-    printHelp()
-    sys.exit()
-
-print("Checking that files exist...")
+import os
 
 test_files = []
-for filename in sys.argv[1:]:
-    print(filename)
-    if os.path.exists(filename):
-        test_files.append(filename)
-    else:
-        print("File not found `" + filename + "`")
-        sys.exit()
+for filename in os.listdir('./test'):
+    if (filename.startswith('test_') and filename.endswith('.h')):
+        print("Found test file " + filename)
+        test_files.append('test/' + filename)
 
 print("Extracting test cases...")
 
 test_cases = []
-for filename in sys.argv[1:]:
+for filename in test_files:
     f = open(filename, "r")
     lines = f.readlines()
 
@@ -45,7 +31,7 @@ output_lines.append('#include "test/testing.h"')
 output_lines.append('')
 output_lines.append('// Include the test files')
 
-for filename in sys.argv[1:]:
+for filename in test_files:
     output_lines.append('#include "' + filename + '"')
 
 output_lines.append('')
