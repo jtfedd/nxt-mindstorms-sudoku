@@ -64,7 +64,7 @@ void DrawBoard(int &board[][]) {
   for (int i = 0; i < 9; i++) {
     for (int j = 0; j < 9; j++) {
       int number = board[i][j];
-      if (number == -1) {
+      if (number == 0) {
         continue;
       }
       DrawNumber(number, i, j);
