@@ -1,140 +1,62 @@
 #include "drawing/drawing.h"
+#include "src/solve/utils.h"
+#include "test/sudoku_puzzles.h"
 
-bool remove_possibilities(int &possibilities[][][], int row, int col, int value) {
-  possibilities[BOX][boxIndex(row, col)][value] &= !numToBit(boxInternalIndex(row, col));
-  possibilities[ROW][row][value] &= !numToBit(col);
-  possibilities[COL][col][value] &= !numToBit(row);
-  possibilities[POS][row][col] &= !numToBit(value);
-}
-
-// assigns a number to the position in the board and removes all possibilities for that number
-void assign_number(int &board[][], int &possibilities[][][], int &constraints[][], int row, int col, int value) {
-  int box = boxIndex(row, col);
-  int bitValue = numToBit(value);
-  
-  // save the value in the board
-  board[row][col] = value;
-  
-  // satisfy the constraints for this number in this row, column, and box
-  constraints[BOX][boxIndex(row, col)] |= bitValue;
-  constraints[ROW][row] |= bitValue;
-  constraints[COL][col] |= bitValue;
-  
-  // remove all possibilities for this number from this row
-  for (int r = 0; r < 9; r++) {
-    remove_possibilities(possibilities, r, col, value);
-  }
-  
-  // remove all possibilities for this number from this column
-  for (int c = 0; c < 9; c++) {
-    remove_possibilities(possibilities, row, c, value);
-  }
-  
-  // remove all possibilities for this number from this box
-  int box_left = (col / 3) * 3;
-  int box_top = (row / 3) * 3;
-  for (int r = box_top; r < box_top + 3; r++) {
-    for (int c = box_left; c < box_left + 3; c++) {
-      remove_possibilities(possibilities, r, c, value);
+bool isPossibility(int &board[][], int num, int row, int col) {
+  // Check if it exists in the row, column, and box
+  int box_index = boxIndex(row, col);
+  for (int i = 0; i < 9; i++) {
+    if (board[row][i] == num) {
+      return false;
+    }
+    if (board[i][col] == num) {
+      return false;
+    }
+    if (board[getBoxRow(box_index, i)][getBoxCol(box_index, i)] == num) {
+      return false;
     }
   }
-  
-  // remove possibilities for all numbers at this position
-  for (int i = 0; i < 9; i++) {
-    remove_possibilities(possibilities, row, col, i);
-  }
+  return true;
 }
+  
+  
 
 bool SolveSudoku(int &board[][]) {
-  // Initialize the board and possibilities
+  bool foundNewSolution = true;
   
-  // working_board holds the solved values so far
-  int working_board[9][9];
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-      working_board[i][j] = -1;
-    }
-  }
-  
-  // possibilities holds bits corresponding to possible places numbers could be
-  // 0 - box index -> number, each box value is bits for whether that number can appear at that position in the box
-  // 1 - row index -> number, each row value is bits for whether that number can appear at that position in the row
-  // 2 - col index -> number, each col value is bits for whether that number can appear at that position in the column
-  // 3 - 9x9 grid of values, each value is bits for whether a number is possible there
-  int possibilities[4][9][9];
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 9; j++) {
-      for (int k = 0; k < 9; k++) {
-        possibilities[i][j][k] = 0x1FF;
-      }
-    }
-  }
-  
-  // constraints holds bits corresponding to constraints that have been satisfied
-  // 0 - boxes: each box value has bits for whether that number is in the box
-  // 1 - rows: each row value has bits for whether that number is in the row
-  // 2 - columns: each col value has bits for whether that number is in the column
-  int constraints[3][9];
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 9; j++) {
-      constraints[i][j] = 0;
-    }
-  }
-  
-  // Start by assigning the numbers from the input and eliminating possibilities
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-      if (board[i][j] > 0) {
-        assign_number(working_board, possibilities, constraints, i, j, board[i][j]);
-      }
-    }
-  }
-  
-  bool foundNumber = true;
-  while (foundNumber) {
-    foundNumber = false;
-    
-    // check for positions where only a single number can go
+  while (foundNewSolution) {
+    foundNewSolution = false;
     for (int r = 0; r < 9; r++) {
       for (int c = 0; c < 9; c++) {
-        if (singleBitSet(possibilities[POS][r][c])) {
-          assign_number(working_board, possibilities, constraints, r, c, bitToNumber(possibilities[POS][r][c]));
-          foundNumber = true;
+        if (board[r][c] != 0) {
+          continue;
+        }
+      
+        int possibility = 0;
+        for (int i = 1; i <= 9; i++) {
+          if (isPossibility(board, i, r, c)) {
+            if (possibility > 0) {
+              possibility = -1;
+              break;
+            } else {
+              possibility = i;
+            }
+          }
+        }
+        if (possibility > 0) {
+          board[r][c] = possibility;
+          foundNewSolution = true;
         }
       }
     }
-    
-    // check for boxes where a number can only go one place in the box
-    for (int box_index = 0; box_index < 9; box_index++) {
-      for (int num = 0; num < 9; num++) {
-        if (singleBitSet(possibilities[BOX][box_index][num-1])) {
-          int internal_index = possibilities[BOX][box_index][num-1];
-          int row = getBoxRow(box_index, internal_index);
-          int col = getBoxCol(box_index, internal_index);
-          assign_number(working_board, possibilities, constraints, row, col, num);
-          foundNumber = true;
-        }
-      }
-    }
-    
-    
   }
 
   return true;
 }
 
 task main() {
-  int board[][] = {
-    {9, -1, -1, 1, -1, 7, -1, 3, -1},
-    {6, -1, 1, -1, 5, -1, 4, -1, -1},
-    {-1, -1, -1, 4, 9, -1, -1, -1, 5},
-    {-1, 1, 5, -1, -1, -1, 9, -1, -1},
-    {7, -1, -1, -1, -1, -1, -1, -1, 2},
-    {-1, -1, 6, -1, -1, -1, 5, 8, -1},
-    {3, -1, -1, -1, 6, 5, -1, -1, -1},
-    {-1, -1, 2, ,-1, 1, -1, 6, -1, 9},
-    {-1, 6, -1, 2, -1, 4, -1, -1, 3}
-  };
+  int board[9][9];
+  copy_board(board, easy);
 
   DrawBoard(board);
 
