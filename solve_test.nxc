@@ -2,65 +2,16 @@
 #include "src/solve/utils.h"
 #include "test/sudoku_puzzles.h"
 
-bool isPossibility(int &board[][], int num, int row, int col) {
-  // Check if it exists in the row, column, and box
-  int box_index = boxIndex(row, col);
-  for (int i = 0; i < 9; i++) {
-    if (board[row][i] == num) {
-      return false;
-    }
-    if (board[i][col] == num) {
-      return false;
-    }
-    if (board[getBoxRow(box_index, i)][getBoxCol(box_index, i)] == num) {
-      return false;
-    }
-  }
-  return true;
-}
-  
-  
-
-bool SolveSudoku(int &board[][]) {
-  bool foundNewSolution = true;
-  
-  while (foundNewSolution) {
-    foundNewSolution = false;
-    for (int r = 0; r < 9; r++) {
-      for (int c = 0; c < 9; c++) {
-        if (board[r][c] != 0) {
-          continue;
-        }
-      
-        int possibility = 0;
-        for (int i = 1; i <= 9; i++) {
-          if (isPossibility(board, i, r, c)) {
-            if (possibility > 0) {
-              possibility = -1;
-              break;
-            } else {
-              possibility = i;
-            }
-          }
-        }
-        if (possibility > 0) {
-          board[r][c] = possibility;
-          foundNewSolution = true;
-        }
-      }
-    }
-  }
-
-  return true;
-}
-
 task main() {
   int board[9][9];
+  
+  int iterations = 0;
+  int guesses = 0;
   copy_board(board, easy);
 
   DrawBoard(board);
 
-  bool solved = SolveSudoku(board);
+  bool solved = SolveSudoku(board, iterations, guesses);
   
   DrawBoard(board);
   
@@ -70,6 +21,7 @@ task main() {
   }
   
   TextOut(65, LCD_LINE1, result);
+  NumOut(70, LCD_LINE2, iterations);
   
   Wait(50000);
 }
