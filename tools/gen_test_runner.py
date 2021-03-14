@@ -57,7 +57,7 @@ for i, test_case in enumerate(test_cases):
 output_lines.append('  show_results(tests, NUM_TESTS);')
 output_lines.append('}')
 
-f = open('test_runner.nxc', 'w')
+f = open('./test_runner.nxc', 'w')
 f.write('\n'.join(output_lines))
 f.close()
 
