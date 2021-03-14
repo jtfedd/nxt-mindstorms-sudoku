@@ -7,7 +7,7 @@ task main() {
   
   int iterations = 0;
   int guesses = 0;
-  copy_board(board, hard);
+  copy_board(board, easy);
 
   DrawBoard(board);
 
