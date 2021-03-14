@@ -131,6 +131,45 @@ bool SolveSudoku(int &board[][], int &iterations, int &guesses) {
         }
       }
     }
+
+    if (!foundNewSolution) {
+      // No new solutions found, resort to guessing
+
+      // Look for the row and column with the minimum number of choices to guess
+      // No position can have more than 9 options
+      int minOptions = 10;
+      int minRow = 0;
+      int minCol = 0;
+      int firstGuess = 0;
+
+      for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+          if (board[i][j] != 0) {
+            continue;
+          }
+
+          int numOptions = 0;
+          int firstPossibility = 0;
+          for (int k = 1; k <= 9; k++) {
+            if (isPossibility(board, k, i, j)) {
+              numOptions++;
+              if (firstPossibility == 0) {
+                firstPossibility = k;
+              }
+            }
+          }
+
+          if (numOptions < minOptions) {
+            minOptions = numOptions;
+            minRow = i;
+            minCol = j;
+            firstGuess = firstPossibility;
+          }
+        }
+      }
+
+      
+    }
   }
 
   return validate(board);
