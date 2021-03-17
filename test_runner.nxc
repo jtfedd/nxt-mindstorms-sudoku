@@ -2,9 +2,10 @@
 #include "test/testing.h"
 
 // Include the test files
+#include "test/test_solve_context.h"
 #include "test/test_solve_utils.h"
 
-#define NUM_TESTS 7
+#define NUM_TESTS 9
 
 task main() {
   test_case tests[NUM_TESTS];
@@ -15,45 +16,57 @@ task main() {
 
   show_current_test(0, NUM_TESTS);
   current_test = tests[0];
-  current_test.name = "SingleBitSet";
-  Test_SingleBitSet(current_test);
+  current_test.name = "InitSolveCtx1";
+  Test_InitSolveCtx1(current_test);
   tests[0] = current_test;
 
   show_current_test(1, NUM_TESTS);
   current_test = tests[1];
-  current_test.name = "NumToBit";
-  Test_NumToBit(current_test);
+  current_test.name = "InitSolveCtx2";
+  Test_InitSolveCtx2(current_test);
   tests[1] = current_test;
 
   show_current_test(2, NUM_TESTS);
   current_test = tests[2];
-  current_test.name = "BitToNum";
-  Test_BitToNum(current_test);
+  current_test.name = "SingleBitSet";
+  Test_SingleBitSet(current_test);
   tests[2] = current_test;
 
   show_current_test(3, NUM_TESTS);
   current_test = tests[3];
-  current_test.name = "BoxIndex";
-  Test_BoxIndex(current_test);
+  current_test.name = "NumToBit";
+  Test_NumToBit(current_test);
   tests[3] = current_test;
 
   show_current_test(4, NUM_TESTS);
   current_test = tests[4];
-  current_test.name = "BoxIntIndex";
-  Test_BoxIntIndex(current_test);
+  current_test.name = "BitToNum";
+  Test_BitToNum(current_test);
   tests[4] = current_test;
 
   show_current_test(5, NUM_TESTS);
   current_test = tests[5];
-  current_test.name = "GetBoxRow";
-  Test_GetBoxRow(current_test);
+  current_test.name = "BoxIndex";
+  Test_BoxIndex(current_test);
   tests[5] = current_test;
 
   show_current_test(6, NUM_TESTS);
   current_test = tests[6];
+  current_test.name = "BoxIntIndex";
+  Test_BoxIntIndex(current_test);
+  tests[6] = current_test;
+
+  show_current_test(7, NUM_TESTS);
+  current_test = tests[7];
+  current_test.name = "GetBoxRow";
+  Test_GetBoxRow(current_test);
+  tests[7] = current_test;
+
+  show_current_test(8, NUM_TESTS);
+  current_test = tests[8];
   current_test.name = "GetBoxCol";
   Test_GetBoxCol(current_test);
-  tests[6] = current_test;
+  tests[8] = current_test;
 
   show_results(tests, NUM_TESTS);
 }
