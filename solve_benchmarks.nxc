@@ -1,5 +1,5 @@
 #include "drawing/drawing.h"
-#include "src/solve/utils.h"
+#include "src/solve/solve.h"
 #include "test/sudoku_puzzles.h"
 
 void run_benchmark(int line1, int line2, string name, int &board[][]) {
