@@ -1,5 +1,5 @@
 #include "drawing/drawing.h"
-#include "src/solve/utils.h"
+#include "src/solve/solve.h"
 #include "test/sudoku_puzzles.h"
 
 task main() {
@@ -7,7 +7,7 @@ task main() {
   
   int iterations = 0;
   int guesses = 0;
-  copy_board(board, easy);
+  copy_board(board, hard);
 
   DrawBoard(board);
 
@@ -22,6 +22,7 @@ task main() {
   
   TextOut(65, LCD_LINE1, result);
   NumOut(70, LCD_LINE2, iterations);
+  NumOut(70, LCD_LINE3, guesses);
   
   Wait(50000);
 }

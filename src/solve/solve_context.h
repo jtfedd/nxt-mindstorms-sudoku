@@ -9,6 +9,15 @@ struct solve_context {
     int position_possibilities[][];
 };
 
+int nextPossibility(int x, int last_guess) {
+  for (int i = last_guess + 1; i < 10; i++) {
+    if (x & (1 << i)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 void init_board(solve_context &ctx) {
     int initArray[];
     ArrayInit(initArray, 0, 9);
@@ -46,6 +55,19 @@ void init_solve_context(solve_context &ctx, int &board[][]) {
             }
         }
     }
+}
+
+void copy_solve_context(solve_context &src, solve_context &dest) {
+  init_board(dest);
+  init_possibilities(dest);
+  dest.solved_count = src.solved_count;
+
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      dest.board[i][j] = src.board[i][j];
+      dest.position_possibilities[i][j] = src.position_possibilities[i][j];
+    }
+  }
 }
 
 // Returns whether or not a board is a valid, solved sudoku

@@ -1,14 +1,6 @@
 #ifndef SUDOKU_PUZZLES_H
 #define SUDOKU_PUZZLES_H
 
-void copy_board(int &dest[][], int &src[][]) {
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-      dest[i][j] = src[i][j];
-    }
-  }
-}
-
 int empty[][] = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0},
   {0, 0, 0, 0, 0, 0, 0, 0, 0},

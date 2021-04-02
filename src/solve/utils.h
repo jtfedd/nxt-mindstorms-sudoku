@@ -1,13 +1,26 @@
 #ifndef SOLVE_UTILS_H
 #define SOLVE_UTILS_H
 
-#define BOX 0
-#define ROW 1
-#define COL 2
-#define POS 3
+void copy_board(int &dest[][], int &src[][]) {
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      dest[i][j] = src[i][j];
+    }
+  }
+}
 
 bool singleBitSet(int x) {
   return (x && !(x & x-1));
+}
+
+int countBits(int x) {
+  int count = 0;
+  for (int i = 1; i <= 9; i++) {
+    if ((1<<i) & x) {
+      count++;
+    }
+  }
+  return count;
 }
 
 int numToBit(int x) {
