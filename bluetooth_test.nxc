@@ -1,0 +1,17 @@
+#include "src/bluetooth/btio.h"
+
+int connection = 1;
+
+task main() {
+  ClearScreen();
+  TextOut(0, LCD_LINE1, "Awaiting Connect");
+  BTWait(connection);
+  
+  ClearScreen();
+  
+  while(true) {
+    until(ButtonPressed(BTNCENTER, FALSE));
+    BTSendMessage(connection, 0, "Test");
+    until(!ButtonPressed(BTNCENTER, FALSE));
+  }
+}
