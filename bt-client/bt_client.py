@@ -13,7 +13,7 @@ print("Accepted connection from", address)
 while True:
 	data = client_sock.recv(128)
 	msg = data[6:].decode('utf-8').strip('\0')
-	print(msg)
+	print(msg,end='')
 
 client_sock.close()
 server_sock.close()
