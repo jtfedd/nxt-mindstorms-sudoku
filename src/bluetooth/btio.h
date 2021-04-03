@@ -4,9 +4,8 @@
  * Modified by Alexander Demin
  */
 
-#ifndef BTLIB
-   #define BTLIB
-#endif
+#ifndef BTIO
+#define BTIO
 
 byte __buffer[];
 byte __array[];
@@ -45,3 +44,6 @@ string BTReceiveMessage(byte connection, byte mailbox, byte flush){ //receive a 
    BTWait(connection);
    return msg;
 }
+
+#endif
+

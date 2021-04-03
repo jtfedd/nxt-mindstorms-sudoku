@@ -1,17 +1,15 @@
-#include "src/bluetooth/btio.h"
-
-int connection = 1;
+#include "src/bluetooth/bt_print.h"
 
 task main() {
   ClearScreen();
-  TextOut(0, LCD_LINE1, "Awaiting Connect");
-  BTWait(connection);
-  
-  ClearScreen();
+  int count = 0;
   
   while(true) {
     until(ButtonPressed(BTNCENTER, FALSE));
-    BTSendMessage(connection, 0, "Test");
+    bt_print(FormatNum("Test: %d\nSecond Line\n", count));
+    ClearScreen();
+    NumOut(0, LCD_LINE1, count);
+    count++;
     until(!ButtonPressed(BTNCENTER, FALSE));
   }
 }
