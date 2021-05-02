@@ -6,13 +6,19 @@ port = 1
 server_sock.bind(("",port))
 server_sock.listen(1)
 
+packet_size = 82
+
 print("Awaiting connection...")
 client_sock,address = server_sock.accept()
 print("Accepted connection from", address)
 
 while True:
-	data = client_sock.recv(128)
-	msg = data[6:].decode('utf-8').strip('\0')
+	# Receive a packet
+	data = bytearray()
+	while len(data) < packet_size:
+		data.extend(client_sock.recv(packet_size - len(data)))
+	# Parse the packet
+	msg = data[6:].decode('ascii').strip('\0')
 	print(msg,end='')
 
 client_sock.close()
