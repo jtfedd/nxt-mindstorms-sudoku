@@ -2,11 +2,14 @@
 #define SOLVE_CONTEXT_H
 
 #include "src/solve/utils.h"
+#include "src/bluetooth/bt_print.h"
 
 struct solve_context {
     int solved_count;
     int board[][];
     int position_possibilities[][];
+    int guess_depths[][];
+    bool guesses[][];
 };
 
 int nextPossibility(int x, int last_guess) {
@@ -30,8 +33,26 @@ void init_possibilities(solve_context &ctx) {
     ArrayInit(ctx.position_possibilities, initArray, 9);
 }
 
-void set_value(solve_context &ctx, int row, int col, int value) {
+void init_depths(solve_context &ctx) {
+    int initArray[];
+    ArrayInit(initArray, 0, 9);
+    ArrayInit(ctx.guess_depths, initArray, 9);
+}
+
+void init_guesses(solve_context &ctx) {
+    bool initArray[];
+    ArrayInit(initArray, false, 9);
+    ArrayInit(ctx.guesses, initArray, 9);
+}
+
+void set_value(solve_context &ctx, int row, int col, int value, int guess_depth, bool is_guess) {
+    bt_print(FormatNum("Set Value: %d", value));
+    bt_print(FormatNum(" (%d", row));
+    bt_print(FormatNum(", %d)\n", col));
+
     ctx.board[row][col] = value;
+    ctx.guesses[row][col] = is_guess;
+    ctx.guess_depths[row][col] = guess_depth;
     ctx.solved_count++;
 
     int bI = boxIndex(row, col);
@@ -43,15 +64,45 @@ void set_value(solve_context &ctx, int row, int col, int value) {
     }
 }
 
+void reset_guess(solve_context &ctx, int depth, int &guess_row, int &guess_col, int &guessed_value) {
+  for (int r = 0; r < 9; r++) {
+    for (int c = 0; c < 9; c++) {
+      if (ctx.guess_depths[r][c] == depth) {
+        int value = ctx.board[r][c];
+
+        if (ctx.guesses[r][c]) {
+          guess_row = r;
+          guess_col = c;
+          guessed_value = value;
+        }
+
+        ctx.solved_count--;
+        ctx.board[r][c] = 0;
+        ctx.guesses[r][c] = false;
+        ctx.guess_depths[r][c] = 0;
+
+        int bI = boxIndex(r, c);
+        for (int i = 0; i < 9; i++) {
+          ctx.position_possibilities[r][i] |= numToBit(value);
+          ctx.position_possibilities[i][c] |= numToBit(value);
+          ctx.position_possibilities[getBoxRow(bI, i)][getBoxCol(bI, i)] |= numToBit(value);
+        }
+      }
+    }
+  }
+}
+
 void init_solve_context(solve_context &ctx, int &board[][]) {
     init_board(ctx);
     init_possibilities(ctx);
+    init_depths(ctx);
+    init_guesses(ctx);
     ctx.solved_count = 0;
 
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             if (board[i][j] != 0) {
-                set_value(ctx, i, j, board[i][j]);
+                set_value(ctx, i, j, board[i][j], 0, false);
             }
         }
     }

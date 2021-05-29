@@ -3,20 +3,18 @@
 
 #include "src/solve/utils.h"
 #include "src/solve/solve_context.h"
-#include "src/solve/guess_stack.h"
 
 bool SolveSudoku(int &board[][], int &iterations, int &guesses) {
   iterations = 0;
   guesses = 0;
+
+  int guess_depth = 0;
 
   bool foundNewSolution = true;
   bool invalid = false;
 
   solve_context ctx;
   init_solve_context(ctx, board);
-
-  guess_stack stack;
-  init_guess_stack(stack);
 
   while (foundNewSolution && ctx.solved_count < 81) {
     iterations++;
@@ -30,7 +28,7 @@ bool SolveSudoku(int &board[][], int &iterations, int &guesses) {
 
         if (singleBitSet(ctx.position_possibilities[r][c])) {
             int value = bitToNum(ctx.position_possibilities[r][c]);
-            set_value(ctx, r, c, value);
+            set_value(ctx, r, c, value, guess_depth, false);
             foundNewSolution = true;
         } else if (ctx.position_possibilities[r][c] == 0) {
           // If no number can go here, well...
@@ -69,32 +67,29 @@ bool SolveSudoku(int &board[][], int &iterations, int &guesses) {
         return false;
 
         int numToGuess = nextPossibility(ctx.position_possibilities[minR][minC], 0);
-        if (!push(stack, ctx, minR, minC, numToGuess)) {
-          return false;
-        }
-        set_value(ctx, minR, minC, numToGuess);
+        guess_depth++;
+        set_value(ctx, minR, minC, numToGuess, guess_depth, true);
 
         guesses++;
       }
     }
 
-    if (invalid && stack.length > 0) {
-      while (invalid && stack.length > 0) {
+    if (invalid && guess_depth > 0) {
+      while (invalid && guess_depth > 0) {
         // Restore to the last guess and guess the next number.
         // If there's no guess to restore to, then we are out of luck and the board is unsolveable.
         int guess_row = 0;
         int guess_col = 0;
         int guess = 0;
 
-        pop(stack, ctx, guess_row, guess_col, guess);
+        reset_guess(ctx, guess_depth, guess_row, guess_col, guess);
+        guess_depth--;
 
         int next_guess = nextPossibility(ctx.position_possibilities[guess_row][guess_col], guess);
         
         if (next_guess > 0) {
-          if (!push(stack, ctx, guess_row, guess_col, next_guess)) {
-            return false;
-          }
-          set_value(ctx, guess_row, guess_col, next_guess);
+          guess_depth++;
+          set_value(ctx, guess_row, guess_col, next_guess, guess_depth, true);
 
           guesses++;
           foundNewSolution = true;
