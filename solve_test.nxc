@@ -1,13 +1,19 @@
 #include "drawing/drawing.h"
 #include "src/solve/solve.h"
 #include "test/sudoku_puzzles.h"
+#include "src/bluetooth/bt_print.h"
 
 task main() {
+  bt_print("\n");
+  bt_print("##########\n");
+  bt_print("Solve Test\n");
+  bt_print("##########\n");
+
   int board[9][9];
   
   int iterations = 0;
   int guesses = 0;
-  copy_board(board, hard);
+  copy_board(board, evil);
 
   DrawBoard(board);
 
@@ -23,6 +29,12 @@ task main() {
   TextOut(65, LCD_LINE1, result);
   NumOut(70, LCD_LINE2, iterations);
   NumOut(70, LCD_LINE3, guesses);
+  
+  bt_print("\n");
+  bt_print("DONE\n");
+  bt_print("Solved: ");
+  bt_print(result);
+  bt_print("\n\n");
   
   Wait(50000);
 }
