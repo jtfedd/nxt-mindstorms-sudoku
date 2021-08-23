@@ -2,41 +2,44 @@
 #include "src/solve/solve.h"
 #include "test/sudoku_puzzles.h"
 
-void run_benchmark(int line1, int line2, string name, int &board[][]) {
+void run_benchmark(int line, string name, int &board[][]) {
   int iterations = 0;
   int guesses = 0;
   
-  TextOut(0, line1, name);
+  TextOut(0, line, name);
   
   long start_time = CurrentTick();
   bool solved = SolveSudoku(board, iterations, guesses);
   long dt = CurrentTick() - start_time;
   
-  string result = "True";
+  string result = "T";
   if (!solved) {
-    result = "False";
+    result = "F";
   }
   
-  TextOut(60, line1, result);
-  NumOut(0, line2, dt);
-  NumOut(50, line2, iterations);
-  NumOut(75, line2, guesses);
+  TextOut(20, line, result);
+  NumOut(30, line, dt);
+  NumOut(65, line, iterations);
+  NumOut(85, line, guesses);
 }
 
 task main() {
   int board[9][9];
 
   copy_board(board, easy);
-  run_benchmark(LCD_LINE1, LCD_LINE2, "Easy", board);
+  run_benchmark(LCD_LINE1, "E", board);
 
   copy_board(board, medium);
-  run_benchmark(LCD_LINE3, LCD_LINE4, "Medium", board);
+  run_benchmark(LCD_LINE2, "M", board);
   
   copy_board(board, hard);
-  run_benchmark(LCD_LINE5, LCD_LINE6, "Hard", board);
+  run_benchmark(LCD_LINE3, "H", board);
   
   copy_board(board, expert);
-  run_benchmark(LCD_LINE7, LCD_LINE8, "Expert", board);
+  run_benchmark(LCD_LINE4, "Ex", board);
+  
+  copy_board(board, evil);
+  run_benchmark(LCD_LINE5, "Ev", board);
 
   Wait(60000);
 }

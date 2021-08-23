@@ -21,8 +21,8 @@ Current solve benchmarks:
 
 | Puzzle | Solved | Time (ms) | Iterations | Guesses |
 | ------------ | ------------ | ------------ | ------------ | ------------ |
-| Easy | True | 1316| 7 | 0 |
-| Medium | True | 1429| 10 | 0 |
-| Hard | False | 667 | 4 | 0 |
-| Expert | False | 547| 4 | 0 |
-| Evil | - | - | - | - |
+| Easy | True | 1344 | 7 | 0 |
+| Medium | True | 2307 | 10 | 0 |
+| Hard | True | 4150 | 17 | 4 |
+| Expert | True | 7981 | 23 | 7 |
+| Evil | True | 5026 | 15 | 8 |
